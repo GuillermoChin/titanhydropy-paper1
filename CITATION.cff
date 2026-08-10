@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "TitanHydroPy: an open-source nonlinear shallow-water framework for barometrically forced long waves in Titan's hydrocarbon seas (Paper 1 code snapshot)"
+abstract: >-
+  Frozen, self-contained code snapshot supporting the manuscript
+  "TitanHydroPy: a validated open-source nonlinear shallow-water framework
+  for barometrically forced long waves in Titan's hydrocarbon seas."
+  Regenerates every figure and every number reported in the paper from a
+  single command, with no external data and no network access.
+type: software
+authors:
+  - family-names: "Chin-Canche"
+    given-names: "Guillermo Adrian"
+    affiliation: "Instituto Tecnológico Superior de Cakiní (ITESCAM), Calkiní, Campeche, Mexico"
+    # orcid: "https://orcid.org/0000-0003-2104-6625"   # 
+license: MIT
+version: "1.0.0"
+date-released: "2025-08-09"                            # [AJUSTAR al día del release]
+keywords:
+  - Titan
+  - meteotsunami
+  - Proudman resonance
+  - shallow-water equations
+  - numerical modelling
+  - hydrocarbon seas
+  - planetary science
+  - open-source software
+repository-code: "https://github.com/guillermochin/titanhydropy-paper1"
+# Once Zenodo mints a DOI, uncomment and fill:
+# identifiers:
+#   - type: doi
+#     value: 10.5281/zenodo.XXXXXXX
+#     description: "Zenodo archive of this release"
+preferred-citation:
+  type: article
+  title: "TitanHydroPy: a validated open-source nonlinear shallow-water framework for barometrically forced long waves in Titan's hydrocarbon seas"
+  authors:
+    - family-names: "Chin-Canche"
+      given-names: "Guillermo Adrian"
+  journal: "Icarus"                                    # [AJUSTAR si la revista final cambia]
+  year: 2026                                           # [AJUSTAR al año de publicación]
+  # doi: "10.xxxx/xxxxx"                               # [COMPLETAR tras aceptación]

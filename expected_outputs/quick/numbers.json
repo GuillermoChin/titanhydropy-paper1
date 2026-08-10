@@ -1,0 +1,190 @@
+{
+  "consistency_2d_1d": {
+    "rel_error_same_dt": 9.056411076306554e-13,
+    "v_max_2d": 0.0
+  },
+  "gate1_well_balanced": {
+    "mass_rel_error_1d": 0.0,
+    "mass_rel_error_2d": 0.0,
+    "u_max_1d": 0.0,
+    "u_max_2d": 0.0,
+    "v_max_2d": 0.0,
+    "zeta_max_1d": 0.0,
+    "zeta_max_2d": 0.0
+  },
+  "gate2_conservation": {
+    "energy_growth_1d": 0.0,
+    "mass_drift_1d": 1.5767235095431378e-16
+  },
+  "gate3_dambreak": {
+    "l1_errors": [
+      9522.963562255063,
+      4850.024918478478,
+      2437.5888487359784,
+      1222.7304648585164
+    ],
+    "l1_order": 0.9876449945685201,
+    "pairwise_orders": [
+      0.9734184529240493,
+      0.9925373543639174,
+      0.9953483898191183
+    ],
+    "resolutions": [
+      100,
+      200,
+      400,
+      800
+    ],
+    "star_depth": 145.38408923745726
+  },
+  "gate4_mms": {
+    "l1_errors_1d_none": [
+      27.373062634626244,
+      6.788486426681395,
+      1.6892104088941373
+    ],
+    "l1_errors_2d_mc": [
+      28251.639952205755,
+      6913.93392121134,
+      1691.3739234128075
+    ],
+    "l1_errors_2d_minmod": [
+      85466.31661014528,
+      26261.129943408087,
+      7484.745252883836
+    ],
+    "l1_errors_2d_none": [
+      24916.783692237168,
+      6365.09929705148,
+      1609.096990682582
+    ],
+    "l1_errors_2d_order1": [
+      489130.1619651499,
+      257066.81568280686,
+      131901.35598890306
+    ],
+    "order_1d_none": 2.0091679561906264,
+    "order_2d_mc": 2.0310335345755894,
+    "order_2d_minmod": 1.7566654138563003,
+    "order_2d_none": 1.9763973300462685,
+    "order_2d_order1": 0.9453795172206881,
+    "resolutions": [
+      32,
+      64,
+      128
+    ]
+  },
+  "gate5_sweep": {
+    "amplification": [
+      1.013991888447301,
+      1.0751893450809387,
+      1.195843947478199,
+      1.4165964266999436,
+      1.8556455554649152,
+      2.991089716290053,
+      8.488127422103302,
+      9.033086298804518,
+      5.480027482841115,
+      2.010525267378159,
+      1.1747517320322554
+    ],
+    "bound_amplification": [
+      1.013991888447301,
+      1.0751893450809387,
+      1.195843947478199,
+      1.4165964266999436,
+      1.8556455554649152,
+      2.991089716290053,
+      8.488127422103302,
+      9.033086298804518,
+      5.480027482841115,
+      2.010525267378159,
+      1.1747517320322554
+    ],
+    "froude": [
+      0.13598207330510528,
+      0.27196414661021057,
+      0.4079462199153158,
+      0.5439282932204211,
+      0.6799103665255264,
+      0.8158924398306316,
+      0.951874513135737,
+      1.0,
+      1.0878565864408423,
+      1.2238386597459476,
+      1.3598207330510528
+    ],
+    "nx": 500,
+    "peak_amplification": 9.033086298804518,
+    "peak_by_resolution": [
+      7.987795665580495,
+      10.157527874143273,
+      11.248653245499693
+    ],
+    "peak_convergence_ratio": 1.98852695164214,
+    "peak_resolutions": [
+      375,
+      750,
+      1500
+    ],
+    "peak_richardson": 12.352442443703993,
+    "peak_speed": 14.70782104868019,
+    "production_bias": 0.17769073440851865,
+    "resonance_speed": 14.70782104868019,
+    "speeds": [
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0,
+      14.0,
+      14.70782104868019,
+      16.0,
+      18.0,
+      20.0
+    ]
+  },
+  "inverse_barometer": {
+    "delta_p_effective": 99.99062901196885,
+    "rel_error": 0.00020767027823526715,
+    "zeta_numeric": -0.16431601566440007,
+    "zeta_theory": -0.16435014630501124
+  },
+  "meta": {
+    "g": 1.352,
+    "numpy": "2.2.6",
+    "observed_front_speed": [
+      2.0,
+      10.0
+    ],
+    "python": "3.13.3",
+    "quick": true,
+    "reference_depths": {
+      "kraken_central_min": 100.0,
+      "ligeia_max": 160.0,
+      "moray_sinus": 85.0,
+      "punga_max": 110.0
+    },
+    "resonant_depth_band": [
+      2.9585798816568047,
+      73.96449704142012
+    ],
+    "rho": 450.0,
+    "seed": 20250101,
+    "sweep_speed_range": [
+      2.0,
+      20.0
+    ],
+    "to_verify": [
+      "TITAN.p_surface (TO_VERIFY)",
+      "TITAN.t_surface_polar (TO_VERIFY)",
+      "TITAN.rho_atm (TO_VERIFY)",
+      "Ligeia-like methane-dominated (baseline) rho/mu/sigma (TO_VERIFY)",
+      "ETHANE_RICH_REFERENCE sigma (TO_VERIFY)",
+      "REFERENCE_DEPTHS['kraken_central_min']: Poggiali et al. 2020: >100 m (sin eco de fondo)",
+      "REFERENCE_DEPTHS['punga_max']: Punga Mare bathymetry paper: confirmar valor exacto",
+      "OBSERVED_FRONT_SPEED: Charnay et al. 2015, Nature Geoscience 8, 362-366, DOI 10.1038/ngeo2406; viento de gust front como proxy de velocidad de propagaci\u00f3n; dato ecuatorial, aplicabilidad polar por verificar"
+    ]
+  }
+}
