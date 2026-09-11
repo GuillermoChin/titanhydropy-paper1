@@ -50,7 +50,7 @@ def mc_slope(q: np.ndarray) -> np.ndarray:
     Pendiente limitada monotonized-central (MC, van Leer) al ultimo eje.
 
     Menos disipativa que minmod, sigue siendo TVD. Se ofrece como alternativa
-    para el test de orden formal (compuerta 4 de Sprint 2): los limitadores TVD
+    para el test de orden formal (compuerta 4, 2D): los limitadores TVD
     degradan el orden en los extremos suaves, y MC lo degrada menos que minmod.
     """
     s = np.zeros_like(q)

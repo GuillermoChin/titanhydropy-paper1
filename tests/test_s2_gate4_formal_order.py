@@ -1,6 +1,6 @@
 """
-SPRINT 2 - COMPUERTA 4: Orden formal de exactitud sobre solucion SUAVE.
-=======================================================================
+COMPUERTA 4 (2D): Orden formal de exactitud sobre solucion SUAVE.
+=================================================================
 Blinda la afirmacion metodologica del Paper 1: el esquema es de orden 2 en
 regiones suaves. El dam-break NO puede demostrarlo (su ~1 en L1 es el limite
 teorico impuesto por el choque); esta compuerta lo hace con el Metodo de

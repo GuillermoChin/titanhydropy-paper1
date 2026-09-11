@@ -1,10 +1,10 @@
 """
-SPRINT 2 - COMPUERTA 6: Validacion fisico-Titan (Nivel C) completa.
-===================================================================
+COMPUERTA 6 (2D): Validacion fisico-Titan (Nivel C) completa.
+=============================================================
 Verifica que:
   * c = sqrt(g h) para REFERENCE_DEPTHS es coherente con OBSERVED_FRONT_SPEED
     (en su forma correcta: la banda resonante interseca el rango de
-    profundidades de la cuenca, ver H-002),
+    profundidades de la cuenca),
   * la respuesta de barometro inverso simulada coincide con inverse_barometer(),
   * las magnitudes de zeta y de velocidad son fisicamente razonables.
 
@@ -40,7 +40,7 @@ pytestmark = pytest.mark.gate
 # ---------------------------------------------------------------------------
 # 6a. Coherencia de las constantes
 # ---------------------------------------------------------------------------
-def test_sanity_check_pasa_con_las_constantes_de_sprint_2():
+def test_sanity_check_pasa_con_las_constantes_vigentes():
     run_sanity()
 
 
@@ -73,7 +73,8 @@ def test_celeridad_de_cada_cuenca_vs_velocidades_observadas():
         assert b["wave_speed_m_s"] == pytest.approx(
             shallow_water_speed(b["depth_m"]))
     assert not any(b["resonance_at_max_depth"] for b in ov["basins"].values()), (
-        "alguna cuenca resuena a profundidad maxima: revisar H-002")
+        "alguna cuenca resuena a profundidad maxima: la resonancia dejaria "
+        "de ser un fenomeno exclusivo de los flancos")
 
 
 def test_la_banda_resonante_es_consistente_con_la_definicion():
@@ -106,7 +107,7 @@ def test_las_celdas_secas_no_cuentan_como_resonantes():
 def test_resumen_de_region_resonante_sobre_una_cuenca_con_pendiente():
     """
     Cuenca con profundidad creciente de 0 a 160 m: la region resonante debe ser
-    una FRANJA de profundidad intermedia, no toda la cuenca (H-002).
+    una FRANJA de profundidad intermedia, no toda la cuenca.
     """
     ny, nx = 20, 200
     h = np.tile(np.linspace(1.0, 160.0, nx), (ny, 1))
@@ -193,11 +194,11 @@ def test_la_conservacion_y_la_finitud_se_mantienen_en_el_escenario(escenario_2d)
 
 def test_la_respuesta_de_barometro_inverso_coincide_con_la_funcion_oficial():
     """
-    Nivel C sobre la compuerta 4 de Sprint 1, reexpresada con el verificador
+    Nivel C sobre la compuerta 4 (1D), reexpresada con el verificador
     de titan_physical: la respuesta estatica medida debe coincidir con
     inverse_barometer() de la fuente unica.
     """
-    # Valor medido en la compuerta 4 de Sprint 1 (docs/VALIDATION.md).
+    # Valor medido en la compuerta 4 (1D): test_gate4_inverse_barometer.py.
     zeta_medido, dp_efectivo = -0.164316, 99.9906
     c = check_inverse_barometer(zeta_medido, dp_efectivo)
     print(f"\n{c}")

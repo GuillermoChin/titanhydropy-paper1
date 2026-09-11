@@ -37,7 +37,7 @@ Este modulo NO trae datos empotrados. Dos vias:
 LAS TRES ESTRATEGIAS DE RECONSTRUCCION
 --------------------------------------
 Se implementan las tres y son intercambiables por nombre. Elegida por defecto:
-`coast_distance` (ver ADR-010 en docs/DECISIONS.md).
+`coast_distance`.
 
 1. `nearest_track` - INTERPOLACION RADIAL DESDE LA TRAZA.
    A cada punto del mar se le asigna la profundidad del punto MAS CERCANO de la
@@ -59,7 +59,7 @@ Se implementan las tres y son intercambiables por nombre. Elegida por defecto:
      cartografiada por radar) para organizar el campo, y honra el perfil medido
      por construccion de Phi. Las franjas de profundidad intermedia siguen la
      geometria real de la costa, que es exactamente lo que hace falta para
-     localizar F -> 1 (H-002).
+     localizar F -> 1.
    * Limitacion: impone simetria respecto de la costa; no puede representar
      canales profundos adosados a un margen ni asimetrias tectonicas.
 
@@ -73,7 +73,7 @@ Se implementan las tres y son intercambiables por nombre. Elegida por defecto:
      tiene tres brazos muy marcados, es una idealizacion fuerte.
 
 CONVENCION: devuelve h0 (PROFUNDIDAD DE REPOSO, positiva en zona liquida y <= 0
-en tierra), de forma (ny, nx), lista para Domain.bathymetry (ADR-001).
+en tierra), de forma (ny, nx), lista para Domain.bathymetry.
 """
 
 from __future__ import annotations
@@ -545,13 +545,12 @@ def reconstruct(x: np.ndarray, y: np.ndarray, profile: TrackProfile,
 
         POR QUE HACE FALTA Y POR QUE ES UN SUPUESTO. Sin topografia emergida el
         "terreno" seria una plataforma plana a la cota del datum y el run-up
-        seria identicamente cero mientras el agua se extenderia sin freno: la
-        primera version de este modulo tenia ese defecto y producia una
-        inundacion de 20 km sin significado fisico.
+        seria identicamente cero mientras el agua se extenderia sin freno, y
+        la inundacion resultante no tendria significado fisico.
 
         La topografia costera de Ligeia NO esta medida con la resolucion que
         este calculo necesita. `land_slope` es por tanto un PARAMETRO LIBRE del
-        estudio de sensibilidad, como los coeficientes de friccion (ADR-006), y
+        estudio de sensibilidad, como los coeficientes de friccion, y
         NO vive en titan_params.py. El valor por defecto 1e-3 (1 m por km) es
         del orden de los margenes muy tendidos que muestra el radar, pero no es
         una medida: el run-up escala como 1/land_slope y hay que barrerlo.
@@ -613,10 +612,12 @@ costa, calibrada con unos pocos sondeos de radar. En consecuencia:
 CONSECUENCIA METODOLOGICA CRITICA para el uso que se le da aqui: como la
 profundidad es proporcional a la distancia a la costa POR CONSTRUCCION, este
 mapa casi no contiene tramos de PROFUNDIDAD UNIFORME. Y el fetch de profundidad
-casi uniforme es exactamente la condicion que H-006 identifica como necesaria
-para la resonancia de Proudman. Por tanto, encontrar aqui ausencia de resonancia
+casi uniforme es exactamente la condicion necesaria para que la resonancia de
+Proudman se sostenga: sobre fondo inclinado la onda ligada radia hacia
+profundidades no resonantes y se desintoniza. Por tanto, encontrar aqui
+ausencia de resonancia
 es ESPERABLE y NO demuestra que no la haya en la Ligeia real: demuestra que no
-la hay en la batimetria analitica estandar. Ver el encuadre en Hallazgos.md.
+la hay en la batimetria analitica estandar.
 """
 
 
@@ -755,7 +756,7 @@ class LorenzMap:
         return sub, meta
 
 
-# CRITERIO DE RECORTE DE LIGEIA (documentado en docs/DECISIONS.md, ADR-012).
+# CRITERIO DE RECORTE DE LIGEIA.
 # Caja generosa centrada en el maximo de Ligeia (79.5 N, 109 E). Los limites se
 # eligen para (a) contener la cuenca entera, (b) cortar el estrecho que la une a
 # Kraken y (c) excluir el maximo global de 197 m, que es de Kraken. La holgura
@@ -763,9 +764,15 @@ class LorenzMap:
 LIGEIA_LATLON_BOX = (74.0, 86.0, 75.0, 145.0)   # (lat_min, lat_max, lon_min, lon_max)
 
 
-def load_lorenz_map(path: str | Path = "docs/bathymetry_map.txt") -> LorenzMap:
+def load_lorenz_map(path: str | Path) -> LorenzMap:
     """
     Carga el mapa ASCII de Lorenz et al. 2014, Apendice A.
+
+    `path` es OBLIGATORIO. El fichero de datos no forma parte del paquete, y una
+    ruta por defecto relativa se resolveria contra el directorio de trabajo, de
+    modo que la misma llamada leeria un fichero u otro -o ninguno- segun desde
+    donde se ejecutase. Quien llama debe construir la ruta de forma explicita,
+    derivandola de la raiz de su proyecto.
 
     FORMATO: 325 filas x 270 columnas, un entero por celda con la profundidad en
     metros (0 = tierra). Terminadores CR/LF: se abre en modo texto universal, de
@@ -819,7 +826,7 @@ def lorenz_region_to_bathymetry(sub: np.ndarray, meta: dict,
     wet = h > 0.0
 
     # Topografia emergida, mismo criterio que la reconstruccion idealizada:
-    # PARAMETRO LIBRE, no dato (ADR-006, ADR-010).
+    # PARAMETRO LIBRE, no dato.
     if land_slope > 0.0 and np.any(~wet):
         X, Y = np.meshgrid(x, y)
         d = distance_to_coast(~wet, dx, dx, X=X, Y=Y)

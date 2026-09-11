@@ -5,7 +5,8 @@ Persistencia de resultados. Formato .npz comprimido: autocontenido, sin
 dependencias externas y con metadatos de procedencia embebidos.
 
 REGLA DE PROCEDENCIA: toda salida guarda la lista de constantes en TO_VERIFY
-vigentes en el momento de la corrida. 
+vigentes en el momento de la corrida. Un fichero de resultados sin esa lista no
+es utilizable para un manuscrito.
 """
 
 from __future__ import annotations

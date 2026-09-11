@@ -1,6 +1,6 @@
 """
-SPRINT 2 - COMPUERTA 5: Barrido de resonancia y CONVERGENCIA DEL PICO.
-=======================================================================
+COMPUERTA 5 (2D): Barrido de resonancia y CONVERGENCIA DEL PICO.
+================================================================
 COMPUERTA CIENTIFICA CENTRAL DEL PAPER 1.
 
 Dos exigencias, no una:
@@ -175,7 +175,7 @@ def test_lejos_de_la_resonancia_la_respuesta_ligada_recupera_la_teoria(barrido):
     La teoria estacionaria 1/|1-F^2| describe la RESPUESTA LIGADA, la que viaja
     pegada a la perturbacion. Es contra ella contra la que hay que contrastar, a
     ambos lados de F = 1. (El maximo global incluye ademas la onda libre de
-    arranque; ver el test siguiente y H-003.)
+    arranque; ver el test siguiente.)
     """
     print(f"\n{'U':>6} {'F':>7} {'A_ligada':>9} {'A_teo':>9} {'error':>8}")
     for u in (5.0, 8.0, 11.0, 16.0, 18.0, 20.0):
@@ -190,7 +190,7 @@ def test_lejos_de_la_resonancia_la_respuesta_ligada_recupera_la_teoria(barrido):
 @pytest.mark.slow
 def test_el_maximo_global_sesga_al_alza_solo_en_regimen_supercritico(barrido):
     """
-    DIAGNOSTICO EXPLICITO (H-003). El maximo global y la respuesta ligada
+    DIAGNOSTICO EXPLICITO. El maximo global y la respuesta ligada
     coinciden en subcritico (la onda libre de arranque adelanta al disturbio y
     sale por la frontera abierta) y divergen en supercritico (la onda libre
     queda rezagada dentro del dominio). Documentarlo evita atribuir a la fisica

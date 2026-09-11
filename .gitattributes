@@ -1,1 +1,9 @@
+# SIN CONVERSION DE FIN DE LINEA. Es un requisito de INTEGRIDAD, no de estilo.
+#
+# Con `core.autocrlf` activo, git guardaria LF en el objeto y escribiria CRLF al
+# sacar el fichero: los bytes en disco tras un clon NO serian los comiteados y
+# los SHA256SUMS de este snapshot FALLARIAN, que es justo la garantia que este
+# directorio existe para dar.
+#
+# `* -text` desactiva toda normalizacion en ambos sentidos.
 * -text

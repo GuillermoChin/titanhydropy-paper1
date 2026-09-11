@@ -1,6 +1,6 @@
 """
-conftest.py — Paper_1_Code_v2 (snapshot inmutable)
-==================================================
+conftest.py — Paper 1 (snapshot inmutable)
+==========================================
 RE-ENRAIZADO DE IMPORTS. Inserta `src/` en la POSICION 0 de sys.path, de modo
 que `from core... import ...` resuelva SIEMPRE contra la copia congelada de este
 snapshot y nunca contra el codigo vivo del repositorio, aunque el snapshot se

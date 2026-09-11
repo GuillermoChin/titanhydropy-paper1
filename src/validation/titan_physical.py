@@ -72,7 +72,8 @@ def proudman_overlap() -> dict:
     Condición correcta de resonancia alcanzable: la banda resonante
     h_res = U^2/g debe INTERSECAR el rango de profundidades [0, h_max] de la
     cuenca. No se exige que c(h_max) caiga dentro del rango de velocidades: esa
-    era la condición de Sprint 1 y es demasiado fuerte (ver H-002).
+    condición es demasiado fuerte, porque la resonancia exige igualar la
+    celeridad en ALGÚN punto del recorrido, no en el más profundo.
     """
     v_min, v_max, status, src = OBSERVED_FRONT_SPEED
     h_res_min, h_res_max = resonant_depth_band()
@@ -91,7 +92,7 @@ def proudman_overlap() -> dict:
             "wave_speed_m_s": c,
             "froude_at_min_front": v_min / c,
             "froude_at_max_front": v_max / c,
-            # ¿Resuena a profundidad MÁXIMA? (condición fuerte de Sprint 1)
+            # ¿Resuena a profundidad MÁXIMA? (condición fuerte, que NO es la correcta)
             "resonance_at_max_depth": bool(v_min <= c <= v_max),
             # ¿Resuena en ALGÚN punto de la cuenca? (condición correcta)
             "resonance_reachable": bool(h_res_min < depth),
@@ -199,7 +200,7 @@ def check_resonant_band_intersects_basins() -> PhysicalCheck:
     """
     Con OBSERVED_FRONT_SPEED, la banda resonante debe intersecar el rango de
     profundidades de cada cuenca de referencia. Es la forma correcta del
-    linchpin (ver H-002).
+    linchpin.
     """
     h_min, h_max = resonant_depth_band()
     fallos = [n for n, (d, _, _) in REFERENCE_DEPTHS.items() if h_min >= d]

@@ -16,7 +16,7 @@ ECUACIONES RESUELTAS (2D NLSWE, promediadas en la vertical)
                                                          + tau_y/rho - f h u
                                                          + h a_fric_y
 
-con h = zeta - b, b = -h0 (h0 = batimetria positiva del Domain, ADR-001).
+con h = zeta - b, b = -h0 (h0 = batimetria positiva del Domain).
 
 =========================  SUPUESTOS NUMERICOS  =============================
 * ESQUEMA DIMENSIONALMENTE **NO ESCINDIDO** (unsplit). Esto es explicito y
@@ -31,9 +31,9 @@ con h = zeta - b, b = -h0 (h0 = batimetria positiva del Domain, ADR-001).
             configurable. La discretizacion direccional es EXACTAMENTE la misma
             rutina que usa el motor 1D (core.fvm_kernel.directional_rhs), de
             modo que la propiedad well-balanced demostrada bit a bit en 1D se
-            hereda en cada direccion sin reimplementar nada (ADR-004, ADR-005).
+            hereda en cada direccion sin reimplementar nada.
 * Fondo   : reconstruccion hidrostatica de Audusse et al. (2004) por direccion.
-* Tiempo  : SSPRK3 en FORMA INCREMENTAL (ADR-003), imprescindible para el
+* Tiempo  : SSPRK3 en FORMA INCREMENTAL, imprescindible para el
             equilibrio de reposo exacto.
 * CFL     : dt = cfl / max[ (|u|+c)/dx + (|v|+c)/dy ], la condicion propia de un
             esquema no escindido. Con dx = dy y v = 0 NO coincide con el CFL 1D:
@@ -75,7 +75,7 @@ class NativeFVMSolver2D(Solver):
     """
     Motor FVM 2D no escindido. El estado publico son variables primitivas
     (zeta, u, v) de forma (ny, nx); la conversion a conservadas (h, hu, hv) es
-    estrictamente interna (ADR-001).
+    estrictamente interna.
 
     Parametros de construccion
     --------------------------
@@ -300,7 +300,7 @@ class NativeFVMSolver2D(Solver):
         return self._config.cfl / rmax
 
     def step(self, dt: float | None = None) -> float:
-        """SSPRK3 en forma incremental (ADR-003). Devuelve el dt usado."""
+        """SSPRK3 en forma incremental. Devuelve el dt usado."""
         if dt is None:
             dt = self.compute_stable_dt()
             if self._config.max_dt is not None:

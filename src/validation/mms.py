@@ -129,7 +129,7 @@ class ManufacturedSolution:
         return h, u, v
 
     def exact_primitive(self, x, y, t) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Solucion exacta en variables PRIMITIVAS (zeta, u, v), ADR-001."""
+        """Solucion exacta en variables PRIMITIVAS (zeta, u, v)."""
         h, u, v = self.exact(x, y, t)
         return h + self.bed_elevation(x, y), u, v
 

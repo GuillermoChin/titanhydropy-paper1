@@ -11,7 +11,7 @@ CONVENCION DE MALLA (explicita para evitar el error clasico de medio dx):
 
 CONVENCION DE FORMA: todos los campos 2D son (ny, nx). Domain.bathymetry es la
 PROFUNDIDAD DE REPOSO h0 > 0 de forma (ny, nx); el motor la convierte a cota de
-fondo b = -h0 internamente (ADR-001).
+fondo b = -h0 internamente.
 """
 
 from __future__ import annotations
@@ -92,7 +92,7 @@ def parabolic_basin(lx: float, ly: float, nx: int, ny: int, depth_center: float,
     Cuenca paraboloide de revolucion:  h0(r) = D * (1 - r^2/L^2).
 
     Es la geometria del test analitico de Thacker (oscilacion en cuenca
-    parabolica), que se usa en Sprint 3 para validar wetting-drying. Fuera del
+    parabolica), que se usa para validar wetting-drying. Fuera del
     radio la "profundidad" se vuelve negativa: el fondo emerge. Se devuelve tal
     cual, y es responsabilidad del motor tratar la zona seca; los constructores
     de estado inicial deben respetar h = max(0, zeta - b).

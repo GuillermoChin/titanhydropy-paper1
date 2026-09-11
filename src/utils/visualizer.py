@@ -55,16 +55,28 @@ def _guardar(fig, path: Path | str, dpi: int = 300) -> Path:
     """
     Guarda la figura en PNG **y** en PDF vectorial con el mismo nombre base.
 
+    Icarus exige arte vectorial o, en su defecto, 300 dpi como minimo; se dan
+    ambas cosas. El nombre del PNG no cambia, para no romper referencias.
+
     No se usa `bbox_inches="tight"`: las figuras se crean con
     `layout="constrained"`, que ya reserva el espacio de titulos y leyendas.
     Combinar ambos recortaria el lienzo de forma distinta en PNG y en PDF, y las
     dos versiones dejarian de ser la misma figura.
+
+    DETERMINISMO DEL PDF. matplotlib estampa la hora de pared en
+    `/CreationDate` dentro del diccionario de metadatos del PDF, de modo que dos
+    corridas identicas producian PDF con distinto digest: cuatro bytes, todos
+    dentro de la marca de tiempo. Un revisor que regenerase las figuras y
+    ejecutase `sha256sum -c` veia cuatro ficheros fallando y tenia que averiguar
+    por su cuenta que era un sello temporal y no un cambio de contenido.
+    `metadata={"CreationDate": None}` omite el campo y deja el PDF tan
+    reproducible como el PNG.
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(path, dpi=dpi)
     pdf = path.with_suffix(".pdf")
-    fig.savefig(pdf)
+    fig.savefig(pdf, metadata={"CreationDate": None})
     print(f"[figura] {path}")
     print(f"[figura] {pdf}")
     return path
@@ -79,10 +91,9 @@ def _titulo(ax, title: str, subtitle: str | None) -> None:
 
     El subtitulo se coloca en y = 1.01 en coordenadas de ejes, asi que el titulo
     necesita `pad` suficiente para no solaparse con el. Sin el pad, ambos caen a
-    la misma altura y el texto se pisa: ocurrio en la primera version de las
-    figuras del experimento-puente, y volvio a ocurrir en las figuras 1 y 3 del
-    Paper 1, que dibujaban el subtitulo a mano sin reservar el hueco. Por eso
-    esta funcion es el unico camino admitido para poner titulo y subtitulo.
+    la misma altura y el texto se pisa, que es lo que ocurre si el subtitulo se
+    dibuja a mano sin reservar el hueco. Por eso esta funcion es el unico
+    camino admitido para poner titulo + subtitulo.
     """
     ax.set_title(title, pad=22 if subtitle else 6)
     if subtitle:
@@ -164,7 +175,8 @@ def plot_bathymetry(x: np.ndarray, y: np.ndarray, depth: np.ndarray,
                     resonant_band: tuple[float, float] | None = None):
     """
     Mapa de batimetria. Si se pasa `resonant_band`, se sombrea la franja de
-    profundidad resonante: es la lectura clave de H-002.
+    profundidad resonante: es la lectura clave, porque la resonancia solo es
+    alcanzable en esa franja y no en toda la cuenca.
     """
     plt = _mpl()
     if plt is None:

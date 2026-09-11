@@ -6,8 +6,8 @@ para que los TESTS puedan importarlo: una compuerta de validacion tiene que
 correr exactamente el mismo escenario que el experimento del paper, no una
 version parecida.
 
-ESCENARIO LIGEIA (Sprint 3 / Paper 2)
-------------------------------------
+ESCENARIO LIGEIA (Paper 2)
+--------------------------
 Frente convectivo movil de presion sobre la batimetria reconstruida de Ligeia
 Mare, con wetting-and-drying activo y Coriolis en el plano f de la latitud
 polar norte.
@@ -17,7 +17,7 @@ Diagnosticos que produce:
     final: el instante final no tiene por que ser el de maxima inundacion).
   * MAPA DE AMPLIFICACION respecto de la respuesta estatica de barometro
     inverso: A(x,y) = envolvente|zeta| / |zeta_IB|.
-  * CAMPO DE FROUDE local F(x,y) = U/sqrt(g h) y la region F -> 1 (H-002).
+  * CAMPO DE FROUDE local F(x,y) = U/sqrt(g h) y la region F -> 1.
   * RUN-UP e inundacion sobre la envolvente.
 
 TODO valor fisico se importa de constants/titan_params.py.
@@ -84,8 +84,8 @@ class LigeiaConfig:
     coast: Coastline | None = None
     # Batimetria YA construida. Si se pasa, se usa tal cual y se ignoran
     # profile/coast/strategy/LX/LY/dx, que se reajustan a la malla recibida.
-    # Es el enganche del experimento-puente: permite correr EXACTAMENTE el mismo
-    # diagnostico de forma de campo sobre la batimetria publicada de Lorenz.
+    # Permite correr EXACTAMENTE el mismo diagnostico de forma de campo sobre
+    # la batimetria publicada de Lorenz.
     bathymetry: BathymetryResult | None = None
 
     def as_dict(self) -> dict:
@@ -131,8 +131,8 @@ def build_ligeia_domain(cfg: LigeiaConfig) -> tuple[Domain, BathymetryResult]:
     """
     Malla + batimetria, con la procedencia adjunta.
 
-    Si `cfg.bathymetry` viene dado (experimento-puente con la batimetria
-    publicada de Lorenz), se adopta tal cual y se REAJUSTAN cfg.LX, cfg.LY y
+    Si `cfg.bathymetry` viene dado (por ejemplo, la batimetria publicada de
+    Lorenz), se adopta tal cual y se REAJUSTAN cfg.LX, cfg.LY y
     cfg.dx a esa malla, para que el resto del escenario —recorrido del frente,
     posicion inicial, muestreo— quede consistente con el dominio real.
     """

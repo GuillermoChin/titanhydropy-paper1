@@ -11,11 +11,11 @@ type: software
 authors:
   - family-names: "Chin-Canche"
     given-names: "Guillermo Adrian"
-    affiliation: "Instituto Tecnológico Superior de Cakiní (ITESCAM), Calkiní, Campeche, Mexico"
-    # orcid: "https://orcid.org/0000-0003-2104-6625"   # 
+    affiliation: "Instituto Tecnológico Superior de Calkiní (ITESCAM), Calkiní, Campeche, Mexico"
+    orcid: "https://orcid.org/0000-0003-2104-6625"
 license: MIT
-version: "1.0.0"
-date-released: "2025-08-09"                            # [AJUSTAR al día del release]
+version: "1.0.1"
+date-released: "2026-09-11"
 keywords:
   - Titan
   - meteotsunami
@@ -26,17 +26,10 @@ keywords:
   - planetary science
   - open-source software
 repository-code: "https://github.com/guillermochin/titanhydropy-paper1"
-# Once Zenodo mints a DOI, uncomment and fill:
-# identifiers:
-#   - type: doi
-#     value: 10.5281/zenodo.XXXXXXX
-#     description: "Zenodo archive of this release"
-preferred-citation:
-  type: article
-  title: "TitanHydroPy: a validated open-source nonlinear shallow-water framework for barometrically forced long waves in Titan's hydrocarbon seas"
-  authors:
-    - family-names: "Chin-Canche"
-      given-names: "Guillermo Adrian"
-  journal: "Icarus"                                    # [AJUSTAR si la revista final cambia]
-  year: 2026                                           # [AJUSTAR al año de publicación]
-  # doi: "10.xxxx/xxxxx"                               # [COMPLETAR tras aceptación]
+
+# NOTA. Este fichero cita EL SOFTWARE. No lleva `preferred-citation` a
+# proposito: el manuscrito asociado esta en revision y todavia no tiene
+# revista, ano ni DOI. Afirmarlos aqui haria que cualquier gestor de
+# referencias renderizase una cita a algo que no existe. Cuando el articulo
+# se acepte se REEMITE el snapshot con los datos reales, que es para lo que
+# existe el protocolo de reemision.

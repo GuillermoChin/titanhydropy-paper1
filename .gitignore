@@ -1,48 +1,8 @@
-# --- Python ---
+# Salidas regenerables de reproduce/run_all.py. No forman parte del snapshot
+# ni de su manifiesto: las produce la propia reproduccion.
+outputs/
+outputs_quick/
+
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-dist/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# --- Tests, coverage ---
 .pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-
-# --- Entornos virtuales ---
-.venv/
-venv/
-env/
-ENV/
-
-# --- Editores ---
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# --- Sistema operativo ---
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# --- Salidas de reproducción (regenerables por run_all.py) ---
-# expected_outputs/ SÍ se versiona (es la referencia publicada).
-# outputs/ NO se versiona (se regenera con `python reproduce/run_all.py`).
-outputs/
-reproduce/outputs/
-
-# --- Nunca subir claves ni secretos ---
-*.pem
-*.key
-.env
-.env.*

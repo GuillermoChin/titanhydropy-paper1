@@ -1,7 +1,7 @@
 """
-reproduce/run_all.py — Paper 1 (snapshot inmutable v2)
-======================================================
-Regenera TODAS las figuras y todos los numeros del Paper con un solo comando.
+reproduce/run_all.py — Paper 1 (snapshot inmutable)
+===================================================
+Regenera TODAS las figuras y todos los numeros del Paper 1 con un solo comando.
 
     python reproduce/run_all.py                 # corrida completa (~10 min)
     python reproduce/run_all.py --quick         # version rapida (~1 min)
@@ -14,7 +14,7 @@ reproducibilidad bit a bit esta garantizada en la misma maquina y el mismo
 NumPy; entre maquinas las diferencias son de nivel de redondeo (< 1e-12
 relativo), y el test de reproduccion usa esa tolerancia.
 
-Texto de las figuras en INGLES; comentarios y consola en español.
+Texto de las figuras en INGLES; comentarios y consola en espanol.
 """
 
 from __future__ import annotations
@@ -267,17 +267,21 @@ def _guardar_fig(fig, path) -> None:
     """
     PNG a 300 dpi + PDF vectorial, mismo nombre base.
 
-    Las figuras que pasan por
+    Icarus pide arte vectorial o 300 dpi como minimo. Las figuras que pasan por
     `utils.visualizer` usan su `_guardar()`, que hace exactamente esto; las dos
     figuras que se dibujan aqui (2 y 4) usan esta copia local para no obligar al
     runner a importar un helper privado.
 
     Sin `bbox_inches="tight"`: las figuras se crean con `layout="constrained"`.
+
+    `metadata={"CreationDate": None}` omite el sello temporal que matplotlib
+    escribe en el PDF; sin el, dos corridas identicas daban PDF con distinto
+    digest. Ver el docstring de `utils.visualizer._guardar`.
     """
     from pathlib import Path as _P
     path = _P(path)
     fig.savefig(path, dpi=300)
-    fig.savefig(path.with_suffix(".pdf"))
+    fig.savefig(path.with_suffix(".pdf"), metadata={"CreationDate": None})
     print(f"      [figura] {path}")
     print(f"      [figura] {path.with_suffix('.pdf')}")
 
@@ -542,8 +546,11 @@ def main() -> int:
     }
 
     destino = outdir / "numbers.json"
+    # `newline` EXPLICITO: sin el, en Windows cada salto sale como CRLF y en
+    # Linux como LF, y el mismo calculo produciria bytes distintos segun el
+    # sistema en que se reprodujese.
     destino.write_text(json.dumps(numeros, indent=2, sort_keys=True),
-                       encoding="utf-8")
+                       encoding="utf-8", newline="\n")
     print(f"\n[numeros] {destino}")
     print("\nConstantes aun en TO_VERIFY (no publicar sin verificarlas):")
     for item in audit_provenance():

@@ -1,12 +1,12 @@
 """
-SPRINT 2 - COMPUERTA 1: Lago en reposo 2D (well-balanced).
-==========================================================
+COMPUERTA 1 (2D): Lago en reposo 2D (well-balanced).
+====================================================
 Cero EXACTO bit a bit sobre batimetria 2D variable. Primera prueba: si falla,
-todo lo demas del sprint es ruido.
+todo lo demas de la validacion 2D es ruido.
 
 La exactitud no es automatica al pasar a 2D. Depende de que:
-  * el kernel direccional sea el MISMO que el validado en 1D (ADR-004),
-  * SSPRK3 este en forma incremental (ADR-003),
+  * el kernel direccional sea el MISMO que el validado en 1D,
+  * SSPRK3 este en forma incremental,
   * las fronteras de los CUATRO lados y las esquinas no inyecten desequilibrio,
   * la suma no escindida de las dos direcciones no introduzca redondeo (con
     ambas contribuciones exactamente cero, 0.0 + 0.0 = 0.0 es exacto).

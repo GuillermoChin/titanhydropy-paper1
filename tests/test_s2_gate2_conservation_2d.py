@@ -1,6 +1,6 @@
 """
-SPRINT 2 - COMPUERTA 2: Conservacion 2D.
-========================================
+COMPUERTA 2 (2D): Conservacion 2D.
+==================================
 En cuenca cerrada 2D y sin forzamiento:
   * masa conservada a tolerancia estricta,
   * energia sin crecimiento espurio.

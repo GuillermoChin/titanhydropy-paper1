@@ -1,15 +1,15 @@
 """
-SPRINT 2 - COMPUERTA 3: Consistencia 2D <-> 1D.
-===============================================
+COMPUERTA 3 (2D): Consistencia 2D <-> 1D.
+=========================================
 En un canal 2D invariante transversalmente, el motor 2D debe reproducir la
-solucion 1D de Proudman ya validada en Sprint 1.
+solucion 1D de Proudman ya validada en la serie de compuertas 1D.
 
 POR QUE ESTA COMPUERTA ES FUERTE
 --------------------------------
 Con batimetria y forzamiento independientes de y, y con v = 0, la contribucion
 de la direccion y al lado derecho debe ser EXACTAMENTE cero: las pendientes en y
 son nulas, la reconstruccion hidrostatica da estados identicos a ambos lados de
-cada interfaz en y, y el termino factorizado d(eta) da cero exacto (ADR-004).
+cada interfaz en y, y el termino factorizado d(eta) da cero exacto.
 Por tanto, integrando con la MISMA secuencia de dt, los dos motores deben
 coincidir a precision de maquina, no solo "dentro de tolerancia". Se comprueban
 las dos cosas: coincidencia exacta con dt impuesto, y coincidencia dentro de

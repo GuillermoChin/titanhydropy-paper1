@@ -3,18 +3,20 @@ constants/titan_params.py
 ==========================
 Fuente ÚNICA de verdad para las constantes físicas de Titán en TitanHydroPy.
 
-POLÍTICA DE ESTE MÓDULO:
+POLÍTICA DE ESTE MÓDULO (blindaje anti-alucinación):
   1. Ningún valor se usa en otro módulo sin importarlo desde aquí.
   2. Cada constante lleva: valor, unidad SI, fuente y estatus de verificación.
   3. status = VERIFIED  -> confirmado contra fuente primaria revisada por pares.
-     status = TO_VERIFY -> valor de arranque razonable. sin confirmar alguna fuente primaria.
+     status = TO_VERIFY -> valor de arranque razonable; NO usar en manuscrito
+                           sin confirmar la fuente primaria y el número exacto.
   4. La función audit_provenance() lista todo lo que sigue en TO_VERIFY para
      que una corrida destinada a publicación no arrastre valores sin verificar.
 
 DECISIÓN DE DISEÑO (variables primitivas):
   El estado público del solver se expresa en variables PRIMITIVAS (zeta, u, v),
-  no en conservadas (h, hu, hv). Justificación en docs/DECISIONS.md (ADR-001).
-  Aquí solo se declara para que las constantes se interpreten en ese marco:
+  no en conservadas (h, hu, hv), para que la frontera pública no dependa del
+  motor que haya debajo. Aquí solo se declara para que las constantes se
+  interpreten en ese marco:
   zeta es la elevación de superficie libre, directamente comparable con las
   observaciones de Cassini.
 
@@ -46,18 +48,25 @@ class TitanConstants:
     # Periodo de rotación síncrona (15.945 días). Omega se deriva, no se fija.
     rotation_period: float = 15.945 * 86400.0   # [s]  VERIFIED
 
-    # Presión atmosférica superficial (HASI/Huygens ~1.467 bar).
-    # El documento base la redondea a 1.5 bar; aquí se adopta el valor medido.
-    p_surface: float = 1.467e5       # [Pa]     VERIFIED 
+    # Presión atmosférica superficial medida in situ por HASI/Huygens.
+    # 1467 +/- 1 hPa = 1.467e5 Pa: coincide EXACTAMENTE con el valor adoptado.
+    # El documento base la redondeaba a 1.5 bar; aquí se usa el valor medido.
+    p_surface: float = 1.467e5       # [Pa]     VERIFIED (ver TITAN_PROVENANCE)
 
-    # Temperatura superficial en los mares polares (~90-91 K).
-    # NO usar el valor ecuatorial (~93.7 K): de T dependen rho y mu del líquido.
-    t_surface_polar: float = 90.0    # [K]     VERIFIED
+    # Temperatura superficial en los mares polares del norte.
+    # NO usar el valor ecuatorial (93.65 +/- 0.25 K, Fulchignoni et al. 2005):
+    # de T dependen rho y mu del líquido.
+    #
+    # ATENCION: 90.0 K es un valor ADOPTADO, no medido, y queda POR DEBAJO del
+    # rango que da la fuente primaria disponible (Jennings et al. 2016 mide
+    # 90.7 +/- 0.5 a 91.5 +/- 0.2 K en el polo norte). Por eso sigue TO_VERIFY.
+    t_surface_polar: float = 90.0    # [K]      TO_VERIFY (ver TITAN_PROVENANCE)
 
-    # Densidad atmosférica superficial (para el esfuerzo de viento).
-    # rho_atm: valor 5.3 kg/m^3 confirmado en uso por Charnay et al. 2015;
-    # fuente primaria del dato: Fulchignoni et al. 2005, Nature 438 (HASI/Huygens).
-    rho_atm: float = 5.3             # [kg/m^3] VERIFIED
+    # Densidad atmosférica superficial (solo interviene en el esfuerzo de viento;
+    # el Paper 1 no usa forzamiento de viento).
+    # Es una cantidad DERIVADA, no medida: HASI infiere la densidad de P y T bajo
+    # equilibrio hidrostático y ley de gases reales. Sigue TO_VERIFY.
+    rho_atm: float = 5.3             # [kg/m^3] TO_VERIFY (ver TITAN_PROVENANCE)
 
     @property
     def omega(self) -> float:
@@ -70,6 +79,48 @@ class TitanConstants:
 
 
 TITAN = TitanConstants()  # instancia global de solo lectura
+
+
+# Procedencia LEGIBLE POR MÁQUINA de cada constante de TitanConstants.
+#
+# Existe para que el estatus de verificación sea UN SOLO DATO y no varias
+# copias que puedan desincronizarse: el comentario de cada constante,
+# `audit_provenance()` y `PROVENANCE.md` tienen que decir lo mismo. La
+# auditoría ITERA sobre este diccionario en vez de llevar una lista escrita a
+# mano, y un test comprueba que el documento dice exactamente lo mismo.
+#
+# Regla: ninguna entrada VERIFIED sin cita completa con DOI.
+TITAN_PROVENANCE: dict[str, tuple[str, str]] = {
+    "g": (VERIFIED,
+          "Gravedad superficial estándar (efemérides JPL)"),
+    "radius": (VERIFIED,
+               "Radio medio de Titán (efemérides JPL)"),
+    "rotation_period": (VERIFIED,
+                        "Periodo de rotación síncrona de Titán, 15.945 d, igual "
+                        "a su periodo orbital (efemérides JPL)"),
+    "p_surface": (VERIFIED,
+                  "Fulchignoni, M. et al., 2005. In situ measurements of the "
+                  "physical characteristics of Titan's environment. Nature 438, "
+                  "785-791, DOI 10.1038/nature04314. HASI/Huygens mide "
+                  "1467 +/- 1 hPa en superficie = 1.467e5 Pa: coincidencia "
+                  "exacta con el valor adoptado"),
+    "t_surface_polar": (TO_VERIFY,
+                        "Valor ADOPTADO (90.0 K), no medido. La fuente primaria "
+                        "disponible, Jennings, D. E. et al., 2016. Surface "
+                        "temperatures on Titan during northern winter and "
+                        "spring. ApJL 816, L17, DOI 10.3847/2041-8205/816/1/L17, "
+                        "mide en el polo norte 90.7 +/- 0.5 K subiendo a "
+                        "91.5 +/- 0.2 K. El valor del código queda POR DEBAJO de "
+                        "ese rango, asi que la cita NO lo respalda: o se adopta "
+                        "el valor medido o se justifica la diferencia"),
+    "rho_atm": (TO_VERIFY,
+                "Cantidad DERIVADA, no medida: HASI infiere la densidad de P y T "
+                "bajo equilibrio hidrostático y ley de gases reales "
+                "(Fulchignoni et al. 2005). No se ha localizado fuente primaria "
+                "que publique 5.3 kg/m^3 con esos dígitos; el gas ideal con la "
+                "P y T verificadas da ~5.2 kg/m^3. Solo interviene en el "
+                "esfuerzo de viento, que el Paper 1 no usa"),
+}
 
 
 # =============================================================================
@@ -126,23 +177,39 @@ DEFAULT_FLUID = LIGEIA_METHANE_BASELINE
 # =============================================================================
 # 3. PROFUNDIDADES DE REFERENCIA (para verificaciones físicas, Papers 2-4)
 # =============================================================================
-# Se usan en los tests de coherencia c = sqrt(g*h). NO son dominios de Sprint 1.
+# Se usan en los tests de coherencia c = sqrt(g*h).
 REFERENCE_DEPTHS = {
     "ligeia_max":          (160.0, VERIFIED,   "Mastrogiuseppe et al. 2014, GRL, 10.1002/2013GL058618"),
     "moray_sinus":         (85.0,  VERIFIED,   "Poggiali et al. 2020, JGR:Planets, 10.1029/2020JE006558"),
-    "kraken_central_min":  (100.0, TO_VERIFY,  "Poggiali et al. 2020: >100 m (sin eco de fondo)"),
-    "punga_max":           (110.0, VERIFIED,  "Mastrogiuseppe et al. 2018 No Olvidar poner el DOI"),
+    # COTA INFERIOR, NO MEDICIÓN. El radar no recibió eco de fondo, de modo que
+    # la profundidad es MAYOR que la penetración alcanzada; 100 m es el límite
+    # por debajo del cual se puede descartar, no la profundidad de la cuenca.
+    # Usarla como si fuera una medida sobreestima la certeza y subestima h.
+    "kraken_central_min":  (100.0, TO_VERIFY,
+                            "COTA INFERIOR (no medición): Poggiali et al. 2020, "
+                            "JGR:Planets, DOI 10.1029/2020JE006558, reporta "
+                            ">100 m por AUSENCIA DE ECO DE FONDO. La profundidad "
+                            "real es mayor y sigue sin medirse"),
+    "punga_max":           (110.0, VERIFIED,
+                            "Mastrogiuseppe, M., Poggiali, V., Hayes, A. G., "
+                            "Lunine, J. I., Seu, R., Di Achille, G., Lorenz, "
+                            "R. D., 2018. Cassini radar observation of Punga "
+                            "Mare and environs: bathymetry and composition. "
+                            "Earth Planet. Sci. Lett. 496, 89-95, "
+                            "DOI 10.1016/j.epsl.2018.05.033. Profundidad máxima "
+                            "MEDIDA de 110 m a lo largo de la traza de altimetría "
+                            "del sobrevuelo T108"),
 }
 
 # -----------------------------------------------------------------------------
 # DATO FÍSICO vs DECISIÓN DE DISEÑO: dos conceptos que NO deben mezclarse.
 # Antes convivían en una sola constante (CONVECTIVE_FRONT_SPEED), lo que hacía
 # imposible distinguir "esto es lo que Titán hace" de "esto es lo que decidimos
-# simular". Ver docs/DECISIONS.md (ADR-007).
+# simular".
 # -----------------------------------------------------------------------------
 
 # DATO. Rango de velocidad de frentes convectivos atmosféricos [m/s] respaldado
-# por fuente primaria. 
+# por fuente primaria. Lleva estatus de verificación.
 # ES EL LINCHPIN del proyecto: fija qué profundidades pueden entrar en
 # Resonancia de Proudman, porque F = 1 exige c = sqrt(g*h) = U, es decir
 # h_res = U^2/g. Con este rango, h_res ∈ [3.0, 74.0] m.
@@ -150,8 +217,14 @@ REFERENCE_DEPTHS = {
 # NOTA CRÍTICA: Charnay reporta VIENTO de gust front, no velocidad de
 #   propagación del frente; se usa como proxy de orden de magnitud (corrientes
 #   de densidad). El dato es ECUATORIAL; su aplicabilidad polar está sin
-#   verificar. Para mares polares se complementa con Rafkin et al. (2022, Icarus
+#   verificar. Para mares polares complementar con Rafkin et al. (2022, Icarus
 #   373, 114755) y Hueso & Sánchez-Lavega (2006, Nature 442, 428-431).
+#   CORRECCIÓN DE CITA (8 de agosto del 2026). Las páginas eran 344-348 y son
+#   362-366. La revista (Nature Geoscience 8) y el DOI (10.1038/ngeo2406) ya
+#   eran correctos. Se corrige la CITA, no la verificación: el estatus sigue
+#   siendo TO_VERIFY, porque lo que está sin verificar no es de dónde sale el
+#   número sino su aplicabilidad — viento de gust front ECUATORIAL usado como
+#   proxy de velocidad de propagación POLAR.
 OBSERVED_FRONT_SPEED = (2.0, 10.0, TO_VERIFY,
                         "Charnay et al. 2015, Nature Geoscience 8, 362-366, "
                         "DOI 10.1038/ngeo2406; viento de gust front como proxy "
@@ -167,7 +240,7 @@ OBSERVED_FRONT_SPEED = (2.0, 10.0, TO_VERIFY,
 SWEEP_SPEED_RANGE = (2.0, 20.0)
 
 # Calibración de la batimetría de Lorenz et al. 2014 (Icarus 237, 9-15),
-# Apéndice A. Archivo docs/bathymetry_map.txt: 325 filas x 270 columnas.
+# Apéndice A: mapa de 325 filas x 270 columnas.
 LORENZ_BATHYMETRY = {
     # Vertical: el valor de celda ES profundidad en metros (asunción A=0.56).
     "depth_unit": ("meters", VERIFIED, "Lorenz et al. 2014, Apéndice A"),
@@ -228,9 +301,11 @@ def sanity_check() -> None:
     Verificaciones físicas mínimas (Nivel C). Lanza AssertionError si algo
     viola la coherencia esperada. Se ejecuta en la suite de tests.
 
-    La primera versión exigía que c = sqrt(g*h_max) de Ligeia cayera DENTRO
-    del rango de frentes convectivos. Con OBSERVED_FRONT_SPEED = [2, 10] m/s eso
-    es FALSO: c(Ligeia_max) = 14.7 m/s queda por encima del rango observado.
+    EL LINCHPIN, EN SU FORMA CORRECTA
+    ---------------------------------
+    Una condición más estricta exigiría que c = sqrt(g*h_max) de Ligeia cayera
+    DENTRO del rango de frentes convectivos. Con OBSERVED_FRONT_SPEED =
+    [2, 10] m/s eso es FALSO: c(Ligeia_max) = 14.7 m/s queda por encima del rango observado.
 
     Pero esa nunca fue la condición correcta. La resonancia no exige que la
     tormenta iguale la celeridad de la parte MÁS PROFUNDA de la cuenca: exige que
@@ -270,10 +345,12 @@ def audit_provenance() -> list[str]:
     manuscrito debería revisar (y vaciar) esta lista.
     """
     pending = []
-    if TITAN.p_surface and True:  # marcadores explícitos abajo
-        pending.append("TITAN.p_surface (TO_VERIFY)")
-    pending.append("TITAN.t_surface_polar (TO_VERIFY)")
-    pending.append("TITAN.rho_atm (TO_VERIFY)")
+    # Las constantes de Titán se ITERAN desde TITAN_PROVENANCE en vez de
+    # escribirse a mano aquí: una lista a mano deja de coincidir con el estatus
+    # real en cuanto alguien cambia uno sin tocar el otro.
+    for nombre, (status, src) in TITAN_PROVENANCE.items():
+        if status == TO_VERIFY:
+            pending.append(f"TITAN.{nombre}: {src}")
     pending.append(f"{DEFAULT_FLUID.name} rho/mu/sigma (TO_VERIFY)")
     pending.append("ETHANE_RICH_REFERENCE sigma (TO_VERIFY)")
     for k, (_, status, src) in REFERENCE_DEPTHS.items():

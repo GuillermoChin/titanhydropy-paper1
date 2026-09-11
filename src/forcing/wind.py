@@ -3,8 +3,8 @@ forcing/wind.py
 ===============
 Campos de viento a 10 m que satisfacen el protocolo `WindField`.
 
-Sprint 1 solo necesita el caso nulo y uno uniforme; el acoplamiento
-viento-presion (experimentos A/B/C) llega en sprints posteriores.
+Se implementan el caso nulo (NoWind) y uno uniforme (UniformWind). El
+acoplamiento viento-presion no esta implementado en este modulo.
 """
 
 from __future__ import annotations

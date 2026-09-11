@@ -177,13 +177,11 @@
       20.0
     ],
     "to_verify": [
-      "TITAN.p_surface (TO_VERIFY)",
-      "TITAN.t_surface_polar (TO_VERIFY)",
-      "TITAN.rho_atm (TO_VERIFY)",
+      "TITAN.t_surface_polar: Valor ADOPTADO (90.0 K), no medido. La fuente primaria disponible, Jennings, D. E. et al., 2016. Surface temperatures on Titan during northern winter and spring. ApJL 816, L17, DOI 10.3847/2041-8205/816/1/L17, mide en el polo norte 90.7 +/- 0.5 K subiendo a 91.5 +/- 0.2 K. El valor del c\u00f3digo queda POR DEBAJO de ese rango, asi que la cita NO lo respalda: o se adopta el valor medido o se justifica la diferencia",
+      "TITAN.rho_atm: Cantidad DERIVADA, no medida: HASI infiere la densidad de P y T bajo equilibrio hidrost\u00e1tico y ley de gases reales (Fulchignoni et al. 2005). No se ha localizado fuente primaria que publique 5.3 kg/m^3 con esos d\u00edgitos; el gas ideal con la P y T verificadas da ~5.2 kg/m^3. Solo interviene en el esfuerzo de viento, que el Paper 1 no usa",
       "Ligeia-like methane-dominated (baseline) rho/mu/sigma (TO_VERIFY)",
       "ETHANE_RICH_REFERENCE sigma (TO_VERIFY)",
-      "REFERENCE_DEPTHS['kraken_central_min']: Poggiali et al. 2020: >100 m (sin eco de fondo)",
-      "REFERENCE_DEPTHS['punga_max']: Punga Mare bathymetry paper: confirmar valor exacto",
+      "REFERENCE_DEPTHS['kraken_central_min']: COTA INFERIOR (no medici\u00f3n): Poggiali et al. 2020, JGR:Planets, DOI 10.1029/2020JE006558, reporta >100 m por AUSENCIA DE ECO DE FONDO. La profundidad real es mayor y sigue sin medirse",
       "OBSERVED_FRONT_SPEED: Charnay et al. 2015, Nature Geoscience 8, 362-366, DOI 10.1038/ngeo2406; viento de gust front como proxy de velocidad de propagaci\u00f3n; dato ecuatorial, aplicabilidad polar por verificar"
     ]
   }

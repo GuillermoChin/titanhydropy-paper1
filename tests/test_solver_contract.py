@@ -1,6 +1,6 @@
 """
-Sprint 0/1: el motor nativo cumple el contrato abstracto `Solver` y respeta
-ADR-001 (la frontera publica son variables primitivas).
+El motor nativo cumple el contrato abstracto `Solver`, y su frontera publica
+son variables primitivas (zeta, u, v), no conservadas.
 """
 
 from __future__ import annotations
@@ -43,7 +43,7 @@ def test_forzamientos_satisfacen_sus_protocolos():
 
 
 def test_estado_publico_es_primitivo_y_es_copia():
-    """ADR-001: la frontera publica expone (zeta,u,v); mutarla no toca el motor."""
+    """La frontera publica expone (zeta,u,v); mutarla no toca el motor."""
     s = _setup()
     st = s.state
     assert isinstance(st, State)

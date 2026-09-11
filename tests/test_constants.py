@@ -1,4 +1,4 @@
-"""Sprint 0: la fuente unica de constantes es coherente e importable."""
+"""La fuente unica de constantes es coherente e importable."""
 
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ def test_signo_del_barometro_inverso():
 
 
 def test_auditoria_de_procedencia_no_vacia():
-    """Sprint 1 corre con valores TO_VERIFY: la auditoria debe delatarlos."""
+    """Hay valores TO_VERIFY en uso: la auditoria debe delatarlos."""
     pending = audit_provenance()
     assert pending, "audit_provenance() no puede estar vacia todavia"
     assert any("OBSERVED_FRONT_SPEED" in p for p in pending)
@@ -77,7 +77,7 @@ def test_linchpin_de_proudman_para_ligeia():
     NO se exige que c(h_max) caiga dentro del rango de frentes observados: con
     OBSERVED_FRONT_SPEED = [2,10] m/s eso es FALSO (c(Ligeia_max)=14.7 m/s) y
     sin embargo la resonancia si es alcanzable en los flancos intermedios de la
-    cuenca. Ver H-002 en Hallazgos.md.
+    cuenca.
     """
     ov = proudman_overlap()
     ligeia = ov["basins"]["ligeia_max"]
@@ -87,7 +87,7 @@ def test_linchpin_de_proudman_para_ligeia():
     # Y se documenta explicitamente que NO resuena a profundidad maxima.
     assert not ligeia["resonance_at_max_depth"], (
         "c(Ligeia_max) ha vuelto a caer dentro de OBSERVED_FRONT_SPEED: "
-        "revisar H-002, la conclusion del hallazgo cambiaria")
+        "la resonancia dejaria de ser un fenomeno exclusivo de los flancos")
 
 
 def test_todas_las_cuencas_de_referencia_alcanzan_la_resonancia():

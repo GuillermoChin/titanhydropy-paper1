@@ -141,7 +141,7 @@ class ThackerPlanar:
         return u, np.zeros_like(u)
 
     def state(self, x, y, t: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """Estado en variables PRIMITIVAS (zeta, u, v), ADR-001.
+        """Estado en variables PRIMITIVAS (zeta, u, v).
 
         zeta = h + b = superficie libre en la zona mojada; en la zona seca se
         toma zeta = -h0_campo (es decir h = 0), que es la convencion del motor.

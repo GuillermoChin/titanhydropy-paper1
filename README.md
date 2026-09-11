@@ -1,54 +1,54 @@
-# Paper 1 — Code snapshot v2 (immutable)
+# Paper 1 — Code snapshot v1.0.1 (immutable)
 
 Frozen, self-contained snapshot of the TitanHydroPy code that produced every
 number and every figure of Paper 1.
 
-> **This directory is immutable.** It is never modified by later sprints. The
-> live code in the repository root continues to evolve; this snapshot does not.
-> `SHA256SUMS` and `tests/test_reproduction.py` enforce that.
+> **This directory is immutable.** The development code it was frozen from
+> continues to evolve; this archive does not. `SHA256SUMS` and
+> `tests/test_reproduction.py` enforce that.
 
-## Relationship to v1 — read this before comparing the two
+## About this release
 
-This is a **reissue**. The previous snapshot lives on, untouched, in
-`Paper_1_Code/`; it was neither modified nor renamed, because an immutable
-snapshot that gets moved is no longer immutable. Both versions coexist.
+This archive accompanies the manuscript and contains everything needed to
+regenerate its figures and numbers from scratch.
 
-**The physics, the solver and every published number are unchanged.** The full
-reproduction of v2 is bit-for-bit identical to v1 across all 108 reported
-quantities. What changed is documentation, one citation, and figure
-presentation:
+It **supersedes an earlier issue tagged `v1.0.0`**. Corrections to a released
+archive are made by **reissuing** it under a new tag, never by editing a release
+in place: an archive that can be edited after the fact is no longer a record of
+anything. Earlier issues remain available and unmodified.
 
-| | v1 | v2 |
-|---|---|---|
-| Dam-break L1 order (README text) | 0.985 | **0.9970** |
-| Peak convergence ratio (README text) | ≈2.45 | **2.336** |
-| Effective order of peak convergence | ≈1.3 | **1.16–1.22** |
-| Charnay et al. 2015 pages | 344–348 | **362–366** |
-| Figures | PNG at 150 dpi | PNG at 300 dpi **+ vector PDF** |
+**The physics, the solver and every reported number are unchanged across
+issues.** Reproduction is bit-for-bit identical over all 158 reported quantities
+and over all eight figure files.
 
-### Why the v1 numbers were wrong, and what that does *not* affect
+**`expected_outputs/numbers.json` is the source of truth for every number in this
+archive — not this README.**
 
-The v1 README reported the mesh convergence of the resonant peak as a **ratio of
-successive relative changes** (10.74 % / 4.35 % and 4.35 % / 1.78 %, giving 2.47
-and 2.44, quoted as "≈2.45"). Richardson extrapolation requires the ratio of
-**absolute differences**. Relative changes are normalised by different
-denominators, so their quotient is not a convergence ratio at all.
+### Two levels of reproducibility, and which one holds where
 
-With the absolute differences — 1.0912, 0.4892, 0.2094 — the ratios are **2.231
-and 2.336**, and the effective order is **1.16–1.22**, not ≈1.3.
+The **numbers** and the **images** reproduce anywhere: any machine, any supported
+platform, any compatible version of the dependencies. That is the guarantee the
+science rests on, and `expected_outputs/numbers.json` is where it is recorded.
 
-**The computation was always correct; only the prose was wrong.**
-`reproduce/run_all.py::exp_barrido` has always used `np.abs(np.diff(picos))`, and
-both v1 and v2 store `peak_convergence_ratio = 2.336067` in
-`expected_outputs/numbers.json`. Consequently `A∞ = 12.104` and the
-production-resolution bias of **7.07 %** are unaffected and stand as published.
+The **bytes** of the figure files reproduce inside the pinned environment of
+`requirements.txt`. Figure files are containers: a PNG is an encoded image and a
+PDF is an encoded document, and the encoders live in the dependency chain. A
+different version of an encoder can store the very same image as a different
+byte stream, which is why `requirements.txt` pins the packages that determine
+those bytes — including transitive ones nobody imports directly.
 
-The v1 dam-break figure of 0.985 was simply **stale**: it matches no
-configuration this snapshot ships. The full ladder (nx = 100…3200) gives 0.9970
-and `--quick` (100…800) gives 0.9876.
+So if `sha256sum -c` reports a figure mismatch after you regenerate, check your
+environment against `requirements.txt` before concluding that anything changed:
+decode both files and compare the images. Identical images with different bytes
+mean a different encoder, not a different result.
 
-**When the two versions disagree, `expected_outputs/numbers.json` is the source
-of truth in both — not the README.**
+### A note on the dam-break L1 order
+
+`l1_order` is the slope of a log–log fit over whatever resolutions it is given,
+so it is a property of the **mesh ladder** as much as of the scheme. Over this
+snapshot's full ladder (nx = 100…3200) it is **0.9970**; over `--quick`
+(nx = 100…800) it is **0.9876**. A figure quoted without its ladder is
+ambiguous, so this archive always states it.
 
 ## Run everything with one command
 
@@ -73,6 +73,10 @@ python -m pip install -r requirements.txt
 
 Only NumPy is required to compute; matplotlib is needed for the figures and is
 optional (the run degrades gracefully without it). Python ≥ 3.10.
+
+`requirements.txt` also pins the transitive packages that determine the **bytes**
+of the figure files. Install from it if you intend to check the figure checksums;
+for the numbers and the images alone, any compatible environment will do.
 
 ### Verify the snapshot
 
@@ -108,7 +112,7 @@ Every gate is a first-class test, not an optional script.
 |---|---|
 | 1. Lake at rest (well-balanced), 1D and 2D | `max\|ζ\| = max\|u\| = max\|v\| = 0.0` — **exact to the bit**, on variable bathymetry, orders 1 and 2, all limiters, all four boundary types, mixed corners, anisotropic mesh, Coriolis on |
 | 2. Conservation, closed domain | mass drift < 1×10⁻¹², energy strictly non-increasing |
-| 3. Dam break vs exact Riemann | L1 order **0.9970** — capped at ~1 by the shock, as theory requires |
+| 3. Dam break vs exact Riemann | L1 order **0.9970** over the nx = 100…3200 ladder — capped at ~1 by the shock, as theory requires |
 | 4. 2D ↔ 1D consistency | machine precision with matched dt (9×10⁻¹³); rotating the problem 90° changes the answer by **exactly 0.0** |
 | 5. Formal order (MMS, smooth) | base scheme **2.007** (1D) / **1.982** (2D); MC limiter 2.029; minmod (production) 1.805; `order=1` negative control 0.958 |
 | 6. Static inverse barometer | ζ = −0.164316 m vs −0.164350 m theoretical → **0.021 %** error |
@@ -127,11 +131,11 @@ by **7.07 %**, reported rather than hidden).
 is `h = U²/g ∈ [3, 74] m`, below the maximum depth of every catalogued sea.
 Within the observed range and at 160 m the amplification only reaches 1.86.
 
-The consequence — resonance in Titan's seas is a phenomenon of the
-**intermediate-depth flanks**, not the deep basin centres — is recorded as
-**H-002** in the project's `Hallazgos.md`. **It rests entirely on a `TO_VERIFY`
-constant** (Charnay reports gust-front *wind*, at equatorial latitudes) and is
-not publishable until that primary source is closed. See `PROVENANCE.md`.
+The consequence is that resonance in Titan's seas is a phenomenon of the
+**intermediate-depth flanks**, not of the deep basin centres. **It rests entirely
+on a `TO_VERIFY` constant** — Charnay reports gust-front *wind*, measured at
+equatorial latitudes — and is not publishable until that primary source is
+closed. See `PROVENANCE.md`.
 
 ## Layout
 

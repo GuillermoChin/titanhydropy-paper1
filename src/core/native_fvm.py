@@ -47,7 +47,7 @@ __all__ = ["NativeFVMSolver"]
 class NativeFVMSolver(Solver):
     """
     Motor FVM 1D. El estado publico son variables primitivas (zeta, u, v);
-    la conversion a conservadas (h, hu, hv) es estrictamente interna (ADR-001).
+    la conversion a conservadas (h, hu, hv) es estrictamente interna.
 
     Parametros de construccion
     --------------------------

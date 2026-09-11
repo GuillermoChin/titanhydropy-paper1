@@ -113,8 +113,8 @@ def bound_amplification(zeta: np.ndarray, x: np.ndarray, x_center: float,
     Amplificacion de la RESPUESTA LIGADA (bound response): maximo de |zeta|
     restringido a una ventana centrada en la perturbacion de presion.
 
-    POR QUE HACE FALTA (ver H-003 en Hallazgos.md)
-    ----------------------------------------------
+    POR QUE HACE FALTA
+    ------------------
     La metrica global A = max|zeta| / |zeta_IB| sobre todo el dominio mezcla dos
     cosas fisicamente distintas:
       * la respuesta LIGADA, que viaja pegada a la perturbacion y es la que
@@ -161,7 +161,7 @@ def resonant_growth_estimate(delta_p: float, storm_speed: float, sigma: float,
 
 
 # ---------------------------------------------------------------------------
-# Extension 2D (Sprint 2): campo de Froude local e identificacion de F -> 1
+# Extension 2D: campo de Froude local e identificacion de F -> 1
 # ---------------------------------------------------------------------------
 def froude_field(storm_speed: float, depth: np.ndarray,
                  g: float = TITAN.g, min_depth: float = 1e-3) -> np.ndarray:
@@ -173,7 +173,7 @@ def froude_field(storm_speed: float, depth: np.ndarray,
     Es la magnitud que localiza la resonancia sobre una batimetria real: la
     tormenta tiene una sola velocidad U, pero la celeridad de onda varia punto a
     punto, de modo que la condicion F = 1 se cumple en una BANDA de profundidad,
-    no en toda la cuenca (ver H-002).
+    no en toda la cuenca.
 
     Las celdas secas (h <= min_depth) devuelven np.inf: alli la onda larga no
     esta definida y no deben contarse como resonantes.
@@ -227,7 +227,7 @@ def resonant_region_summary(storm_speed: float, depth: np.ndarray,
 
 
 # ---------------------------------------------------------------------------
-# Diagnostico de FORMA del campo de amplificacion (compuerta de H-006)
+# Diagnostico de FORMA del campo de amplificacion
 # ---------------------------------------------------------------------------
 def amplification_depth_profile(depth: np.ndarray, amplification: np.ndarray,
                                 n_bins: int = 20, min_depth: float = 1e-3,
@@ -244,7 +244,7 @@ def amplification_depth_profile(depth: np.ndarray, amplification: np.ndarray,
     responden por DEBAJO del barometro inverso. La media y la mediana quedan
     dominadas por las segundas; la cola alta describe a las primeras. Las dos
     cosas son ciertas y describen fenomenos distintos, asi que hay que reportar
-    ambas en vez de elegir la que convenga. Ver H-008 en Hallazgos.md.
+    ambas en vez de elegir la que convenga.
 
     Devuelve (centros_de_banda, estadistico, n_celdas). Las bandas con menos de
     `min_cells` celdas se descartan: un estadistico sobre cuatro celdas no es un
@@ -303,11 +303,11 @@ def classify_field_shape(depth: np.ndarray, amplification: np.ndarray,
                          shore_fraction: float = 0.20) -> dict:
     """
     Clasifica la FORMA del campo de amplificacion. Es el diagnostico que decide
-    si H-006 se sostiene.
+    si se sostiene que F = 1 es necesaria pero NO suficiente para la resonancia.
 
-    DOS AFIRMACIONES DISTINTAS, QUE UNA VERSION ANTERIOR CONFLABA
-    -------------------------------------------------------------
-    H-006 dice dos cosas que hay que evaluar por separado, porque no son
+    DOS AFIRMACIONES DISTINTAS
+    --------------------------
+    Esa hipotesis dice dos cosas que hay que evaluar por separado, porque no son
     igualmente robustas:
 
       (A) DECISIVA: no hay pico interior en la franja F ~ 1. Es la afirmacion
@@ -316,9 +316,9 @@ def classify_field_shape(depth: np.ndarray, amplification: np.ndarray,
           resonante, la conclusion no depende de como se resuma el campo.
 
       (B) DESCRIPTIVA: el campo decae hacia mar adentro desde un maximo costero.
-          Esta SI depende del estadistico sobre una costa recortada (ver H-008),
-          asi que se reporta por estadistico y NO se usa para decidir sobre
-          H-006.
+          Esta SI depende del estadistico sobre una costa recortada, asi que
+          se reporta por estadistico y NO se usa para decidir sobre la
+          hipotesis.
 
     DOS CRITERIOS PARA (B), y hay que quedarse con el segundo:
       `monotonic_shoreward` exige que el maximo caiga EXACTAMENTE en la primera
@@ -332,7 +332,7 @@ def classify_field_shape(depth: np.ndarray, amplification: np.ndarray,
 
     `shape` refleja (A), que es lo decisivo:
       'no_resonant_peak'        ningun estadistico muestra pico en F ~ 1.
-      'interior_resonant_peak'  al menos uno lo muestra. H-006 SE DEBILITA.
+      'interior_resonant_peak'  al menos uno lo muestra. La hipotesis SE DEBILITA.
 
     `peak_prominence` = 0.10: el pico debe superar en al menos un 10% a la mayor
     de sus dos vecinas. Es una DECISION DE ANALISIS declarada, no un umbral

@@ -21,10 +21,10 @@ Para la direccion y: (mn, mt) = (hv, hu)  sobre arrays transpuestos.
 ESQUEMA (supuestos numericos explicitos)
 ----------------------------------------
 * Volumenes finitos, celdas centradas, malla uniforme.
-* Reconstruccion MUSCL sobre (eta, un, ut, b), NUNCA sobre h (ADR-005).
+* Reconstruccion MUSCL sobre (eta, un, ut, b), NUNCA sobre h.
 * Reconstruccion hidrostatica de Audusse et al. (2004) en cada interfaz.
 * Solver de Riemann HLLC.
-* Termino fuente en FORMA FACTORIZADA g*h_barra*d(eta) (ADR-004): unica forma
+* Termino fuente en FORMA FACTORIZADA g*h_barra*d(eta): unica forma
   que cancela bit a bit en el reposo.
 
 GANCHO DE ACELERACION: puro NumPy sin ramas de Python. Candidato directo a
@@ -128,7 +128,7 @@ def directional_rhs(h_ext: np.ndarray, mn_ext: np.ndarray, mt_ext: np.ndarray,
     #     porque HLLC devuelve justo el termino hidrostatico.
     # (b) gradiente hidrostatico interno FACTORIZADO g*h_barra*d(eta), unica
     #     forma que cancela bit a bit: con eta = 0 se tiene h = -b exactamente y
-    #     (h_R - h_L) + (b_R - b_L) da cero exacto (ADR-004).
+    #     (h_R - h_L) + (b_R - b_L) da cero exacto.
     m0, m1 = NG, NG + n
     h_left = hLc[..., m0:m1]
     h_right = hRc[..., m0:m1]

@@ -3,7 +3,7 @@ core/riemann.py
 ===============
 Solvers de Riemann aproximados para las Ecuaciones de Agua Poco Profunda 1D.
 
-Sistema resuelto (variables conservadas, internas al motor; ver ADR-001):
+Sistema resuelto (variables conservadas, internas al motor):
     q = (h, hu, hv)
     F(q) = (hu, hu^2/h + g h^2/2, hu*hv/h)
 
